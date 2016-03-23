@@ -7,6 +7,9 @@ const jsonBody = require('body/json')
 const course = require('course')
 //Objeto que creará las rutas
 const router = course()
+
+//Requerimos nuestro helper
+const helper = require('../helper')
 //Creamos la configuracion del módulo
 const mount = st({
 	//Asignamos la carpeta que definiremos como public
@@ -18,9 +21,14 @@ const mount = st({
 router.post('/process', function(req,res){
 	jsonBody(req,res,{limit: 3*1024*1024}, function(err,body){
 		if (err) return fail(err,res)
-		console.log(body)
-		res.setHeader('Content-Type','application/json')
-		res.end(JSON.stringify({ok:true}))
+		
+		var converter = helper.convertVideo(body.images)
+		converter.on('video',function(video){
+			res.setHeader('Content-Type','application/json')
+			res.end(JSON.stringify({video: video}))
+		})
+
+		
 	})
 })
 
