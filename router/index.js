@@ -1,6 +1,8 @@
 const path = require('path')
 //Llamamos el módulo st
 const st = require('st')
+//Usamos el módulo body npm install body ;)
+const jsonBody = require('body/json')
 //Llamamos el módulo course
 const course = require('course')
 //Objeto que creará las rutas
@@ -13,6 +15,14 @@ const mount = st({
 	index: 'index.html',
 	passthrough: true
 })
+router.post('/process', function(req,res){
+	jsonBody(req,res,{limit: 3*1024*1024}, function(err,body){
+		if (err) return fail(err,res)
+		console.log(body)
+		res.setHeader('Content-Type','application/json')
+		res.end(JSON.stringify({ok:true}))
+	})
+})
 
 function onRequest(req,res){
 	mount(req,res, function(err){
@@ -24,6 +34,11 @@ function onRequest(req,res){
 			res.end(`Not found ${req.url}`)
 		})
 	})
+}
+function fail(err,res){
+	res.statusCode=500
+	res.setHeader('Content-Type','text/plain')
+	res.end(err.message)
 }
 //EXportar la función onRequest que será llamada
 module.exports = onRequest
