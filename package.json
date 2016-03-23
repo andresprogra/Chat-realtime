@@ -1,0 +1,19 @@
+{
+  "name": "learning-node",
+  "version": "1.0.0",
+  "description": "A realtime chat with video and gifs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andresprogra/Chat-realtime.git"
+  },
+  "author": "Andres Dominguez <andres_gomez@live.com.mx>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andresprogra/Chat-realtime/issues"
+  },
+  "homepage": "https://github.com/andresprogra/Chat-realtime#readme"
+}
