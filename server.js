@@ -4,6 +4,7 @@
 //Variables constantes, porqué los módulos que requerimos no queremos que cambien en algún momento.
 const  http = require('http')
 const fs = require('fs')
+const path = require('path')
 //Accedemos a las variables de entorno para ver en que puerto podemos escuchar
 //Si el primer valor es falso se asignará el 8080
 const port = process.env.PORT || 8080
@@ -19,8 +20,13 @@ server.listen(port)
 //Req = request, peticiones. 
 //Res = response, respuestas
 function onRequest(req, res){
-	let file = fs.readFileSync('public/index.html')
-	res.end(file)
+	let fileName = path.join(__dirname,'public','index.html')
+	fs.readFile(fileName, function (err, file){
+		if (err){
+			return res.end(err.message)
+		}
+		res.end(file)
+	})
 }
 function onListening(){
 	console.log("Escuchando en el puerto " + port)
