@@ -6,6 +6,7 @@ const async = require('async')
 const uuid = require('uuid')
 const dataURIBuffer = require('data-uri-to-buffer')
 const EventEmitter = require('events').EventEmitter
+cost listFiles = require('./lista')
 module.exports = function (images){
 	let events = new EventEmitter()
 	let count = 0
@@ -41,7 +42,12 @@ module.exports = function (images){
 	}
 
 	function cleanup(done){
-		done()
+		events.emit('log','Cleaning up')
+		listFiles(tmpDir, baseName, function(err,files){
+			if (err) return done(err)
+			//Borrado de archivos
+			done()
+		})
 	}
 	function converFinished(err){
 		setTimeout(function(){
