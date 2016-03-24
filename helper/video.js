@@ -6,7 +6,7 @@ const async = require('async')
 const uuid = require('uuid')
 const dataURIBuffer = require('data-uri-to-buffer')
 const EventEmitter = require('events').EventEmitter
-cost listFiles = require('./lista')
+const listFiles = require('./list')
 module.exports = function (images){
 	let events = new EventEmitter()
 	let count = 0
@@ -41,11 +41,34 @@ module.exports = function (images){
 		done()
 	}
 
-	function cleanup(done){
+	/*function cleanup(done){
 		events.emit('log','Cleaning up')
 		listFiles(tmpDir, baseName, function(err,files){
 			if (err) return done(err)
 			//Borrado de archivos
+			deleteFiles(files,done)
+		})
+	}*/
+
+	// Cleanup temp folder
+	function cleanup (done) {
+	    events.emit('log', 'Cleaning up')
+
+	    listFiles(tmpDir, baseName, function (err, files) {
+	      if (err) return done(err)
+
+	      // delete files
+	      deleteFiles(files, done)
+	    })
+	  }
+	function deleteFiles(files,done){
+		async.each(files, deleteFile, done)
+	}
+	function deleteFile(file,done){
+		events.emit('log',`Eliminando archivo ${file}`)
+		//fs.unlink(tmpDir, file),function(err){
+		fs.unlink(path.join(tmpDir, file), function (err) {
+			///Ignoramos el error
 			done()
 		})
 	}
